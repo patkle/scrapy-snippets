@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from scrapy.exporters import CsvItemExporter, JsonItemExporter
 import os
 
 class MultiItemPipeline(object):
@@ -24,12 +23,12 @@ class MultiItemPipeline(object):
     def open_spider(self, spider):
         self.__exporter_for_item = {}
         for exporter, values in self.__exporter_settings.items():
-            ex = self.start_exporter(exporter, values['exporter'])
+            ex = self.__start_exporter(exporter, values['exporter'])
             name = values['item'].__name__
             self.stats.set_value(name, 0)
             self.__exporter_for_item[name] = ex
 
-    def start_exporter(self, name, exporter_class=CsvItemExporter):
+    def __start_exporter(self, name, exporter_class):
         filename = self.__create_output_file(name)
         exporter = exporter_class(open(filename, 'wb'))
         exporter.start_exporting()
