@@ -1,18 +1,21 @@
 # -*- coding: utf-8 -*-
 from scrapy.exporters import CsvItemExporter, JsonItemExporter
 import os
-from .settings import OUTPUT_DIRECTORY, EXPORTERS
 
 class MultiItemPipeline(object):
-    def __init__(self):
-        self.__output_directory = self.__create_output_directory()
-        self.__exporter_settings = EXPORTERS
+    def __init__(self, output_directory, exporters):
+        self.__output_directory = self.__create_output_directory(output_directory)
+        self.__exporter_settings = exporters
+    
+    @classmethod
+    def from_crawler(cls, crawler):
+        output_directory = crawler.settings.get('OUTPUT_DIRECTORY', 'out')
+        exporters = crawler.settings.get('EXPORTERS', {})
+        return cls(output_directory, exporters)
 
-    def __create_output_directory(self):
-        if not OUTPUT_DIRECTORY.endswith('/'):
-            directory = OUTPUT_DIRECTORY + '/'
-        else:
-            directory = OUTPUT_DIRECTORY
+    def __create_output_directory(self, directory):
+        if not directory.endswith('/'):
+            directory = directory + '/'
         if not os.path.exists(directory):
             os.mkdir(directory)
         return directory
