@@ -3,7 +3,8 @@ from scrapy.exporters import CsvItemExporter, JsonItemExporter
 import os
 
 class MultiItemPipeline(object):
-    def __init__(self, output_directory, exporters):
+    def __init__(self, output_directory, exporters, stats):
+        self.stats = stats
         self.__output_directory = self.__create_output_directory(output_directory)
         self.__exporter_settings = exporters
     
@@ -11,7 +12,7 @@ class MultiItemPipeline(object):
     def from_crawler(cls, crawler):
         output_directory = crawler.settings.get('OUTPUT_DIRECTORY', 'out')
         exporters = crawler.settings.get('EXPORTERS', {})
-        return cls(output_directory, exporters)
+        return cls(output_directory, exporters, crawler.stats)
 
     def __create_output_directory(self, directory):
         if not directory.endswith('/'):
@@ -24,7 +25,9 @@ class MultiItemPipeline(object):
         self.__exporter_for_item = {}
         for exporter, values in self.__exporter_settings.items():
             ex = self.start_exporter(exporter, values['exporter'])
-            self.__exporter_for_item[values['item'].__name__] = ex
+            name = values['item'].__name__
+            self.stats.set_value(name, 0)
+            self.__exporter_for_item[name] = ex
 
     def start_exporter(self, name, exporter_class=CsvItemExporter):
         filename = self.__create_output_file(name)
@@ -47,6 +50,7 @@ class MultiItemPipeline(object):
 
     def _exporter_for_item(self, item):
         item_class_name = item.__class__.__name__
+        self.stats.inc_value(item_class_name)
         return self.__exporter_for_item[item_class_name]
 
     def process_item(self, item, spider):
