@@ -17,12 +17,21 @@ IMAGE_URL_FIELDS = {
         'path_field': 'item_field_to_store_image_paths'
     }, 'second_image_url_field': {
         'name_field': 'name',
-        'sub_folder': 'folder'
+        'sub_folder': 'folder',
         'path_field': 'path_field'
     }
 }
 ```
+You can also specify a field `base_url` if necessary, since the pipeline can't handle relative urls at the moment. 
+```python
+IMAGE_URL_FIELDS = {
+    'your_items_image_url_field': {
+        ...
+        'base_url': 'http://example.com'
+    }
+}
 
+```
 ## Additional information
 You cannot use ImagesPipelines [IMAGE_URLS_FIELD](https://docs.scrapy.org/en/latest/topics/media-pipeline.html?highlight=IMAGE_URLS_FIELD#std-setting-IMAGES_URLS_FIELD) with this sub class.  
 However, you need to either implement *IMAGES_RESULT_FIELD* or provide the standard field *images* in your Item.  
