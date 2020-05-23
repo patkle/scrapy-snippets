@@ -33,12 +33,11 @@ class ImageNamePipeline(ImagesPipeline):
         print(results)
         results = [x for ok, x in results if ok]
         for image_field_name, image_settings in self.image_url_fields.items():
-            image_path_list = []
+            image_paths = []
             for result in results:
                 if result['url'] in item[image_field_name]:
-                    image_path_list.append(result['path'])
-            item[image_settings['path_field']] = image_path_list
-            print(image_path_list)
+                    image_paths.append(result['path'])
+            item[image_settings['path_field']] = image_paths
         return item
 
     def file_path(self, request, response=None, info=None):
