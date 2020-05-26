@@ -1,5 +1,5 @@
 # RandomUserAgent
-This middleware let's you choose a random user agent for each request.
+This middleware lets you choose a random user agent for each request.
 
 ## Settings
 You need to set a list of user agents in `USER_AGENTS` and add the middleware to `DOWNLOADER_MIDDLEWARES` in your settings.py file or your settings object.
