@@ -2,7 +2,7 @@
 This is just a collection of code snippets I use in my day to day work. Feel free to use them to your liking whenever you want.
 
 ## Middlewares
-- RandomUserAgent
+- RandomUserAgent  
     rotates the user agent for every request made by Scrapy
 
 ## Pipelines
