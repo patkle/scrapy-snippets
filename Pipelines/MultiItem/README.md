@@ -11,6 +11,9 @@ EXPORTERS = {
         'exporter': ExporterClass
     }
 }
+ITEM_PIPELINES = {
+        'pipeline.MultiItemPipeline': 200
+}
 ```
 
 ## TODO
