@@ -34,9 +34,9 @@ IMAGE_URL_FIELDS = {
 ```
 ## Additional information
 You cannot use ImagesPipelines [IMAGE_URLS_FIELD](https://docs.scrapy.org/en/latest/topics/media-pipeline.html?highlight=IMAGE_URLS_FIELD#std-setting-IMAGES_URLS_FIELD) with this sub class.  
-However, you need to either implement *IMAGES_RESULT_FIELD* or provide the standard field *images* in your Item.  
+However, you need to either implement `IMAGES_RESULT_FIELD` or provide the standard field `images` in your Item.  
   
-For some reason, the spider needs to have *crawler* as an attribute. Make sure to include it, when you override your spider's __init__.
+For some reason, the spider needs to have `crawler` as an attribute. Make sure to include it, when you override your spider's `__init__`.
 ```python
 def __init__(self, crawler):
     self.crawler = crawler
