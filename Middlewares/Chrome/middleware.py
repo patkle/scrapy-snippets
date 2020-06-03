@@ -5,7 +5,7 @@ from .ChromeRequest import ChromeRequest
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 
-class ChromeMiddleware:
+class ChromeMiddleware(object):
     def __init__(self):
         options = Options()
         options.add_argument('--headless')
