@@ -8,3 +8,4 @@ You need to set the middleware in your settings like this:
         'your_project.middleware_file.ChromeMiddleware': 100,
 }
 ```
+Only `ChromeRequest`s will be processed by this middleware.
