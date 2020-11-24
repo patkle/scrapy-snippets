@@ -1,10 +1,9 @@
-# coding: utf8
 from scrapy.http import Request
 from scrapy.pipelines.images import ImagesPipeline
 
 
 class ImagesFieldException(Exception):
-    pass
+    """Exception raised if image field is provided in an unsupported type"""
 
 
 class ImageNamePipeline(ImagesPipeline):
@@ -39,18 +38,21 @@ class ImageNamePipeline(ImagesPipeline):
             meta = {
                 'image_name': item[image_settings.get('name_field', 'name')],
                 'image_folder': image_settings.get('sub_folder', ''),
+                # include counter to avoid duplicate names
                 'image_count': counter
             }
         )
 
     def item_completed(self, results, item, info):
-        print(results)
+        # extract results processed without errors
         results = [x for ok, x in results if ok]
+        # iterate over each image field and the accompanying settings
         for image_field_name, image_settings in self.image_url_fields.items():
             image_paths = []
             for result in results:
                 if result['url'] in item[image_field_name]:
                     image_paths.append(result['path'])
+            # add path of every downloaded image to item
             item[image_settings['path_field']] = image_paths
         return item
 
