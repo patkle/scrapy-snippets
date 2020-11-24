@@ -1,5 +1,6 @@
 # RandomUserAgent
-This middleware lets you choose a random user agent for each request. The user agent is selected from a list set in your Scrapy settings. 
+This middleware sets a random user agent for every request. For this to work, a list of user agents must be provided in either `settings.py` or the settings you pass to the crawler. 
+You also need to set a truthy value for `random_user_agent` in your spider.
 
 ## Settings
 You need to set a list of user agents in `USER_AGENTS` and add the middleware to `DOWNLOADER_MIDDLEWARES` in your settings.py file or your settings object.
