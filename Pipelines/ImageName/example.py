@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import pathlib
 import scrapy
 from scrapy.settings import Settings
 from scrapy.crawler import CrawlerRunner
@@ -23,10 +24,13 @@ class DQSpider(scrapy.Spider):
         print(DQItem(title=title, logo=logo, slime=slime))
         yield DQItem(title=title, logo=logo, slime=slime)
 
-def get_settings():
+def get_settings() -> Settings:
+    """create and return a scrapy settings object"""
     settings = Settings()
-    import pathlib
-    settings.set('IMAGES_STORE', str(pathlib.Path().absolute()) + '\\')
+    # get current working directory
+    cwd = str(pathlib.Path().absolute())
+    # set path in which to store images
+    settings.set('IMAGES_STORE', cwd + '\\')
     settings.set('IMAGE_URL_FIELDS', {
         'logo': {
             'name_field': 'title',
@@ -38,12 +42,15 @@ def get_settings():
             'path_field': 'slime_path',
         }
     })
+    # enable the pipeline
     settings.set('ITEM_PIPELINES', {
         'pipeline.ImageNamePipeline': 200
     })
     return settings
 
 if __name__ == '__main__':
+    # routine to run scrapy from a script
+    # see: https://docs.scrapy.org/en/latest/topics/practices.html#run-scrapy-from-a-script
     settings = get_settings()
     runner = CrawlerRunner(settings)
     d = runner.crawl(DQSpider)
