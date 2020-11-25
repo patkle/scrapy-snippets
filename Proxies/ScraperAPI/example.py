@@ -18,13 +18,13 @@ class IpSpider(scrapy.Spider):
             )
     
     def parse(self, response):
+        # load IP from which the request was made from json response string
         ip = loads(response.text)['origin']
-        print(ip)
         yield {'ip': ip}
 
-def get_settings():
+def get_settings() -> Settings:
     settings = Settings()
-    # TODO: Enter your key in the following line to run this example!
+    # Enter your key in the following line to make this example work!
     settings.set('SCRAPER_API_KEY', 'enter_your_key_here')
     settings.set('DOWNLOADER_MIDDLEWARES', {
         'middleware.ScraperAPIMiddleware': 350,
@@ -33,6 +33,8 @@ def get_settings():
     return settings
 
 if __name__ == '__main__':
+    # routine to run scrapy from a script
+    # see: https://docs.scrapy.org/en/latest/topics/practices.html#run-scrapy-from-a-script
     settings = get_settings()
     runner = CrawlerRunner(settings)
     d = runner.crawl(IpSpider)
