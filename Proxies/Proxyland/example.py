@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
 import scrapy
 from scrapy.settings import Settings
 from scrapy.crawler import CrawlerRunner
 from twisted.internet import reactor
 from scrapy.http import Request
 from json import loads
+
 
 class IpSpider(scrapy.Spider):
     name = 'ip'
@@ -18,17 +18,18 @@ class IpSpider(scrapy.Spider):
             )
     
     def parse(self, response):
+        # load IP which made the request from json string
         ip = loads(response.text)['origin']
-        print(ip)
         yield {'ip': ip}
 
-def get_settings():
+def get_settings() -> Settings:
     settings = Settings()
-    # TODO: Enter your package credentials here!
+    # Enter your package credentials here!
     settings.set('PROXYLAND', {
         'username': 'package_username',
         'password': 'package_password'
     })
+    # enable ProxylandMiddleware and HttpProxyMiddleware
     settings.set('DOWNLOADER_MIDDLEWARES', {
         'middleware.ProxylandMiddleware': 350,
         'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 400,
@@ -36,6 +37,8 @@ def get_settings():
     return settings
 
 if __name__ == '__main__':
+    # routine to run scrapy from a script
+    # see: https://docs.scrapy.org/en/latest/topics/practices.html#run-scrapy-from-a-script
     settings = get_settings()
     runner = CrawlerRunner(settings)
     d = runner.crawl(IpSpider)
